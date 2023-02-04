@@ -22,18 +22,7 @@ public class PlaygroundMaker : MonoBehaviour
 	{
 		string aDummyLevelJson = File.ReadAllText(Path.Combine(Application.dataPath, @"Resources\Level\_dummy_level.json"));
 		gDummyLevel = JsonConvert.DeserializeObject<LevelDescription>(aDummyLevelJson);
-		//if (gDummyLevel != null)
-		//{
-		//	int aRoundAmount = 15;
-		//	for (int aRound = 0; aRound < aRoundAmount; aRound++)
-		//	{
-		//		foreach (var aDrawedLine in gDummyLevel.Lines)
-		//		{
-		//			LineDescription aForkFromLine = gDummyLevel.Lines.Where(aLine => aLine.ID == aDrawedLine.ForkFromLineID).FirstOrDefault();
-		//			aDrawedLine.CreateBlock(aRound, aForkFromLine, LevelRoot, BaseBlock, Left60Block, Left90Block, Right60Block, Right90Block);
-		//		}
-		//	}
-		//}
+		List<JudgeDescription> aJudges = gDummyLevel.GetJudgeDes();
 	}
 
 	private int gCurRound = 0;
@@ -54,27 +43,33 @@ public class PlaygroundMaker : MonoBehaviour
 			gCurRound--;
 			gIsDrawCompleted = false;
 		}
+
 		if (!gIsDrawCompleted && gDummyLevel != null && LevelRoot != null)
 		{
-			//lock round number
-			if (gCurRound < 0) { gCurRound = 0; }
-			if (gCurRound > 15) { gCurRound = 15; }
-
-			Debug.Log($"Current round: {gCurRound}");
-
-			//reset
-			for (int i = 0; i < LevelRoot.transform.childCount; i++) { Destroy(LevelRoot.transform.GetChild(i).gameObject); }
-
-			//
-			for (int aRound = 0; aRound <= gCurRound; aRound++)
-			{
-				foreach (var aDrawedLine in gDummyLevel.Lines)
-				{
-					LineDescription aForkFromLine = gDummyLevel.Lines.Where(aLine => aLine.ID == aDrawedLine.ForkFromLineID).FirstOrDefault();
-					aDrawedLine.CreateBlock(aRound, aForkFromLine, LevelRoot, BaseBlock, Left60Block, Left90Block, Right60Block, Right90Block, BaseLink, gModifySerial);
-				}
-			}
+			DrawRoute(gCurRound);
 			gIsDrawCompleted = true;
+		}
+	}
+
+	public void DrawRoute(int iCurRound)
+	{
+		//lock round number
+		if (iCurRound < 0) { iCurRound = 0; }
+		if (iCurRound > 15) { iCurRound = 15; }
+
+		//Debug.Log($"Current round: {iCurRound}");
+
+		//reset
+		for (int i = 0; i < LevelRoot.transform.childCount; i++) { Destroy(LevelRoot.transform.GetChild(i).gameObject); }
+
+		//
+		for (int aRound = 0; aRound <= iCurRound; aRound++)
+		{
+			foreach (var aDrawedLine in gDummyLevel.Lines)
+			{
+				LineDescription aForkFromLine = gDummyLevel.Lines.Where(aLine => aLine.ID == aDrawedLine.ForkFromLineID).FirstOrDefault();
+				aDrawedLine.CreateBlock(aRound, aForkFromLine, LevelRoot, BaseBlock, Left60Block, Left90Block, Right60Block, Right90Block, BaseLink, gModifySerial);
+			}
 		}
 	}
 
@@ -82,8 +77,28 @@ public class PlaygroundMaker : MonoBehaviour
 	{
 		public string Name { get; set; }
 		public string Description { get; set; }
+		public int BPM { get; set; }
+		public int TotalRound { get; set; }
 		public List<LineDescription> Lines { get; set; }
+
+		public List<JudgeDescription> GetJudgeDes()
+		{
+			List<JudgeDescription> aRtnJudges = new List<JudgeDescription>();
+			for(int aRound = 0; aRound < TotalRound; aRound++)
+			{
+				bool iHasJudge = Lines.Where(aLine => aLine.HasJudge(aRound)).Any();
+				if (iHasJudge) { aRtnJudges.Add(new JudgeDescription() { RoundID = aRound }); }
+			}
+
+			return aRtnJudges;
+		}
 	}
+
+	public class JudgeDescription
+	{
+		public int RoundID { get; set; }
+	}
+
 
 	public class LineDescription
 	{
@@ -220,6 +235,13 @@ public class PlaygroundMaker : MonoBehaviour
 			}
 
 			return aRtnTurnType;
+		}
+		public bool HasJudge(int iRound)
+		{
+			return (
+				Turns.Where(aTurn => aTurn.RoundID == iRound).Any() ||
+				(StartRoundID == iRound && iRound != 0)
+			);
 		}
 	}
 

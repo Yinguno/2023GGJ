@@ -1,6 +1,8 @@
 {
     "Name": "dummy_level",
     "Description": "",
+    "BPM": 60,
+    "TotalRound": 15,
     "Lines": [
         {
             "ID": 0,
