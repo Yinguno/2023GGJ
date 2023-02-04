@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 4464593f59d82134a955b81b41801ea4
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - BaseBlock: {fileID: 3437677911204717535, guid: fcaaa25db93c97244926264b5f4e7fa7, type: 3}
+  - Left60Block: {fileID: 8448933119795396032, guid: 3c8490055fd20dd4eb0422e4e595c109, type: 3}
+  - Left90Block: {fileID: 5150758624387299348, guid: 9dc7448c8e6efad4d9ae014d9ab73b8b, type: 3}
+  - Right60Block: {fileID: 2747514829635452394, guid: 32d6e2959b8daf64592c7152f7d40dea, type: 3}
+  - Right90Block: {fileID: 1862244264354372150, guid: 413f8d6c868ebc2479feda247ea54fb0, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
