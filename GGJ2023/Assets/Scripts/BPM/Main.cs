@@ -9,25 +9,30 @@ public class Main : MonoBehaviour
 
     public event Action<int> BeatJudgmentEvent;
 
-    List<int> jList = new List<int>() {2,3, 5, 8, 10, };
+    List<int> jList = new List<int>() {1,2,3,4, 5,6,7,8,9,10,11,12,13,14,15};
     Dictionary<int, bool> judgementResults = new();
-    AudioSource audio;
+    AudioSource audioSource;
+    [SerializeField] PlaygroundMaker playgroundMaker;
     [SerializeField] AudioClip beat;
     [SerializeField] AudioClip hit;
     // Start is called before the first frame update
     void Start()
     {
-        audio= GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
         metronome = GetComponent<Metronome>();
         metronome.NextBeatEvent += OnNextBeat;
 
-        metronome.StartTrack(new Track(bpm: 90, jList, totalBeats: 50));
-    }
+        metronome.StartTrack(new Track(bpm: 45, jList, totalBeats: 50));
 
+
+    }
+    float ti;
     private void OnNextBeat(int index)
     {
-        audio.PlayOneShot(beat);
-        Debug.Log($"i:{index},time={Time.time}");
+        audioSource.PlayOneShot(beat);
+        playgroundMaker.DrawRoute(index);
+        Debug.Log($"i:{index},next beat delta Time :{Time.time - ti},trackTime={metronome.GetCurrentTime()}");
+        ti = Time.time;
     }
 
     // Update is called once per frame
@@ -37,11 +42,11 @@ public class Main : MonoBehaviour
         {
             metronome.StartTrack(new Track(bpm: 90, jList, totalBeats: 50));
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.X))
         {
+              CheckAHit();
             //Debug.Log(metronome.GetHitResult());
         }
-            CheckAHit();
 
         //Debug.Log(metronome.GetHitResult());
     }
@@ -55,7 +60,7 @@ public class Main : MonoBehaviour
             {
                 judgementResults.Add(metronome.GetCurrentBeatIndex(), true);
                 Debug.Log("success");
-                audio.PlayOneShot(hit);
+                audioSource.PlayOneShot(hit);
             }
             else
             {
