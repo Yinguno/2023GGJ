@@ -1,11 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Main : MonoBehaviour
 {
+    static int modifySerial = 0;
     Metronome metronome;
+    [SerializeField] float musicOffset;
+    [SerializeField] TextMeshProUGUI textMeshPro;
+    [SerializeField] GameObject obj;
 
     public event Action<int> BeatJudgmentEvent;
 
@@ -18,21 +24,28 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
         audioSource = GetComponent<AudioSource>();
         metronome = GetComponent<Metronome>();
         metronome.NextBeatEvent += OnNextBeat;
 
-        metronome.StartTrack(new Track(bpm: 45, jList, totalBeats: 50));
+        StartTrack();
 
 
     }
     float ti;
     private void OnNextBeat(int index)
     {
-        audioSource.PlayOneShot(beat);
-        playgroundMaker.DrawRoute(index);
-        Debug.Log($"i:{index},next beat delta Time :{Time.time - ti},trackTime={metronome.GetCurrentTime()}");
+        //audioSource.PlayOneShot(beat,0.1f);
+        modifySerial++;
+        playgroundMaker.DrawRoute(index, modifySerial);
+        //Debug.Log($"i:{index},next beat delta Time :{Time.time - ti},trackTime={metronome.GetCurrentTime()}");
         ti = Time.time;
+
+        if (!judgementResults.ContainsKey(index))
+        {
+            textMeshPro.text = "miss";
+        }
     }
 
     // Update is called once per frame
@@ -40,7 +53,7 @@ public class Main : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            metronome.StartTrack(new Track(bpm: 90, jList, totalBeats: 50));
+            StartTrack();
         }
         if (Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.X))
         {
@@ -50,7 +63,14 @@ public class Main : MonoBehaviour
 
         //Debug.Log(metronome.GetHitResult());
     }
-
+    private void StartTrack() {
+        judgementResults.Clear();
+        audioSource.Stop();
+        audioSource.time = musicOffset;
+        audioSource.Play();
+        metronome.StartTrack(new Track(bpm: 123, jList, totalBeats: 50));
+    }
+    
     private void CheckAHit()
     {
         if (metronome.GetHitResult())
@@ -59,11 +79,13 @@ public class Main : MonoBehaviour
             if (!judgementResults.ContainsKey(metronome.GetCurrentBeatIndex()))
             {
                 judgementResults.Add(metronome.GetCurrentBeatIndex(), true);
+                textMeshPro.text = "success";
                 Debug.Log("success");
-                audioSource.PlayOneShot(hit);
+                //audioSource.PlayOneShot(hit);
             }
             else
             {
+                textMeshPro.text = "more than one click";
                 Debug.Log("more than one click");
             }
         }

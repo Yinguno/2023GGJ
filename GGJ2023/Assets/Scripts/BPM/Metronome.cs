@@ -9,7 +9,7 @@ public class Metronome : MonoBehaviour,IMetronome
 {
 
     const float secondsInAMinute = 60f;
-    float bpm = 90;
+    float bpm = 123;
     float currentTime = 0;
     Track track;
     int currentBeatIndex = 0;
@@ -38,6 +38,7 @@ public class Metronome : MonoBehaviour,IMetronome
     public void StartTrack(Track track)
     {
         this.track = track;
+        this.bpm = track.bpm;
         currentTime = 0;
         IsStop = false;
     }
