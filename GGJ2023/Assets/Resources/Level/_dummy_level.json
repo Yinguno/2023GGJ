@@ -12,7 +12,7 @@
             "Turns": [
                 {
                     "RoundID": 2,
-                    "TurnType": 3
+                    "TurnType": 2
                 },
                 {
                     "RoundID": 4,
@@ -20,7 +20,7 @@
                 },
                 {
                     "RoundID": 7,
-                    "TurnType": 3
+                    "TurnType": 2
                 },
                 {
                     "RoundID": 10,
@@ -49,7 +49,7 @@
             "ID": 2,
             "ForkFromLineID": 1,
             "StartRoundID": 6,
-            "StartTurnType": 3,
+            "StartTurnType": 2,
             "EndRoundID": 13,
             "Turns": [
                 {

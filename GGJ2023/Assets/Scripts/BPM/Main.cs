@@ -27,10 +27,12 @@ public class Main : MonoBehaviour
 
     }
     float ti;
+
+    private int serial = 0;
     private void OnNextBeat(int index)
     {
         audioSource.PlayOneShot(beat);
-        playgroundMaker.DrawRoute(index);
+        playgroundMaker.DrawRoute(index, serial++);
         Debug.Log($"i:{index},next beat delta Time :{Time.time - ti},trackTime={metronome.GetCurrentTime()}");
         ti = Time.time;
     }

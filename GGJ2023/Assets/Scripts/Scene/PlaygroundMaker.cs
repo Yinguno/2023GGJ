@@ -20,7 +20,7 @@ public class PlaygroundMaker : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		string aDummyLevelJson = File.ReadAllText(Path.Combine(Application.dataPath, @"Resources\Level\_dummy_level.json"));
+		string aDummyLevelJson = File.ReadAllText(Path.Combine(Application.dataPath, @"Resources\Level\level_1.json"));
 		gDummyLevel = JsonConvert.DeserializeObject<LevelDescription>(aDummyLevelJson);
 		List<JudgeDescription> aJudges = gDummyLevel.GetJudgeDes();
 	}
@@ -55,7 +55,7 @@ public class PlaygroundMaker : MonoBehaviour
 	{
 		//lock round number
 		if (iCurRound < 0) { iCurRound = 0; }
-		if (iCurRound > 15) { iCurRound = 15; }
+		if (iCurRound >= gDummyLevel.TotalRound) { iCurRound = gDummyLevel.TotalRound; }
 
 		//Debug.Log($"Current round: {iCurRound}");
 
@@ -259,8 +259,8 @@ public class PlaygroundMaker : MonoBehaviour
 	{
 		NONE,
 		LEFT_60,
-		LEFT_90,
 		RIGHT_60,
+		LEFT_90,
 		RIGHT_90
 	}
 }
