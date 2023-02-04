@@ -285,7 +285,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1980436647}
-  - component: {fileID: 1980436648}
   m_Layer: 0
   m_Name: Application
   m_TagString: Untagged
@@ -308,25 +307,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1980436648
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1980436646}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4464593f59d82134a955b81b41801ea4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LevelRoot: {fileID: 0}
-  BaseBlock: {fileID: 7128584717467720857, guid: 23e05db4966954d4e955512fc79d8324, type: 3}
-  Left60Block: {fileID: 5336737309764800136, guid: 30a092317295ade449a865549c9c17fc, type: 3}
-  Left90Block: {fileID: 8428753963854300147, guid: d31807cba4dc05b4786254a640b51f2b, type: 3}
-  Right60Block: {fileID: 3687839326569817618, guid: a6ee7989b1e2f5c4687c67fe836af8d7, type: 3}
-  Right90Block: {fileID: 1483348485701470221, guid: 10e1f76f69abe7a43a3c2d863a9f1597, type: 3}
-  BaseLink: {fileID: 3935757509671169703, guid: 80c3b186178da5945b359765b2ac9c24, type: 3}
 --- !u!1 &1996216907
 GameObject:
   m_ObjectHideFlags: 0
