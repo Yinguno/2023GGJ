@@ -8,6 +8,7 @@
             "ID": 0,
             "StartRoundID": 0,
             "StartTurnType": 0,
+            "EndRoundID": 11,
             "Turns": [
                 {
                     "RoundID": 2,
@@ -32,6 +33,7 @@
             "ForkFromLineID": 0,
             "StartRoundID": 3,
             "StartTurnType": 0,
+            "EndRoundID": 12,
             "Turns": [
                 {
                     "RoundID": 5,
@@ -48,6 +50,7 @@
             "ForkFromLineID": 1,
             "StartRoundID": 6,
             "StartTurnType": 3,
+            "EndRoundID": 13,
             "Turns": [
                 {
                     "RoundID": 7,
@@ -60,6 +63,7 @@
             "ForkFromLineID": 0,
             "StartRoundID": 8,
             "StartTurnType": 1,
+            "EndRoundID": 15,
             "Turns": [
                 {
                     "RoundID": 9,
