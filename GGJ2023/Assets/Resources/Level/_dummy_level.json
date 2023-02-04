@@ -1,0 +1,69 @@
+{
+    "Name": "dummy_level",
+    "Description": "",
+    "Lines": [
+        {
+            "ID": 0,
+            "StartRoundID": 0,
+            "StartTurnType": 0,
+            "Turns": [
+                {
+                    "RoundID": 2,
+                    "TurnType": 3
+                },
+                {
+                    "RoundID": 4,
+                    "TurnType": 0
+                },
+                {
+                    "RoundID": 7,
+                    "TurnType": 3
+                },
+                {
+                    "RoundID": 10,
+                    "TurnType": 0
+                }
+            ]
+        },
+        {
+            "ID": 1,
+            "ForkFromLineID": 0,
+            "StartRoundID": 3,
+            "StartTurnType": 0,
+            "Turns": [
+                {
+                    "RoundID": 5,
+                    "TurnType": 1
+                },
+                {
+                    "RoundID": 7,
+                    "TurnType": 0
+                }
+            ]
+        },
+        {
+            "ID": 2,
+            "ForkFromLineID": 1,
+            "StartRoundID": 6,
+            "StartTurnType": 3,
+            "Turns": [
+                {
+                    "RoundID": 7,
+                    "TurnType": 0
+                }
+            ]
+        },
+        {
+            "ID": 3,
+            "ForkFromLineID": 0,
+            "StartRoundID": 8,
+            "StartTurnType": 1,
+            "Turns": [
+                {
+                    "RoundID": 9,
+                    "TurnType": 0
+                }
+            ]
+        }
+    ]
+}
