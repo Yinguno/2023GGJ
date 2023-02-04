@@ -46,12 +46,12 @@ public class PlaygroundMaker : MonoBehaviour
 
 		if (!gIsDrawCompleted && gDummyLevel != null && LevelRoot != null)
 		{
-			DrawRoute(gCurRound);
+			DrawRoute(gCurRound, gModifySerial);
 			gIsDrawCompleted = true;
 		}
 	}
 
-	public void DrawRoute(int iCurRound)
+	public void DrawRoute(int iCurRound, int iModifySerial)
 	{
 		//lock round number
 		if (iCurRound < 0) { iCurRound = 0; }
@@ -67,8 +67,11 @@ public class PlaygroundMaker : MonoBehaviour
 		{
 			foreach (var aDrawedLine in gDummyLevel.Lines)
 			{
-				LineDescription aForkFromLine = gDummyLevel.Lines.Where(aLine => aLine.ID == aDrawedLine.ForkFromLineID).FirstOrDefault();
-				aDrawedLine.CreateBlock(aRound, aForkFromLine, LevelRoot, BaseBlock, Left60Block, Left90Block, Right60Block, Right90Block, BaseLink, gModifySerial);
+				if (aRound <= aDrawedLine.EndRoundID)
+				{
+					LineDescription aForkFromLine = gDummyLevel.Lines.Where(aLine => aLine.ID == aDrawedLine.ForkFromLineID).FirstOrDefault();
+					aDrawedLine.CreateBlock(aRound, aForkFromLine, LevelRoot, BaseBlock, Left60Block, Left90Block, Right60Block, Right90Block, BaseLink, iModifySerial);
+				}
 			}
 		}
 	}
@@ -106,6 +109,7 @@ public class PlaygroundMaker : MonoBehaviour
 		public int? ForkFromLineID { get; set; }
 		public int StartRoundID { get; set; }
 		public TurnType StartTurnType { get; set; }
+		public int EndRoundID { get; set; }
 		public List<TurnDescription> Turns { get; set; }
 		
 		public GameObject CreateBlock(
