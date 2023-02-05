@@ -158,6 +158,7 @@ public class PlaygroundMaker : MonoBehaviour
 				aCreatedBlock = GameObject.Instantiate(aTargetPrefab, aCurBlockPosition, new Quaternion());
 				aCreatedBlock.name = $"{ID}_{aTargetPrefab.name}";
 				aCreatedBlock.transform.parent = aRoundRoot.transform;
+				aCreatedBlock.transform.Find("Block").gameObject.name = $"{iRound}_{ID}_Block";
 				aRoundRoot.transform.parent = iLevelRoot.transform;
 
 				// create link
@@ -172,13 +173,13 @@ public class PlaygroundMaker : MonoBehaviour
 							aRotationAngle = 0;
 							break;
 						case TurnType.LEFT_60:
-							aRotationAngle = -60;
+							aRotationAngle = -45;
+							break;
+						case TurnType.RIGHT_60:
+							aRotationAngle = 45;
 							break;
 						case TurnType.LEFT_90:
 							aRotationAngle = -90;
-							break;
-						case TurnType.RIGHT_60:
-							aRotationAngle = 60;
 							break;
 						case TurnType.RIGHT_90:
 							aRotationAngle = 90;
@@ -187,6 +188,7 @@ public class PlaygroundMaker : MonoBehaviour
 					GameObject aCreatedLink = GameObject.Instantiate(iBaseLink, (aCurBlockPosition + aLastBlockPostion) / 2, new Quaternion());
 					aCreatedLink.transform.eulerAngles = new Vector3(0, aRotationAngle, 0);
 					aCreatedLink.transform.localScale = new Vector3(1, 1, (aLastBlockPostion - aCurBlockPosition).magnitude);
+					aCreatedLink.transform.Find("Link").gameObject.name = $"{iRound}_{ID}_Link";
 					aCreatedLink.transform.parent = aRoundRoot.transform;
 				}
 			}
