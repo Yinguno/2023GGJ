@@ -36,23 +36,35 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject SuccessGameObject;
     [SerializeField] GameObject FailGameObject;
 
+    /// <summary>
+    /// 禫╃翴把计琌ㄣΤタ絋﹚╃翴ま
+    /// </summary>
+    event Action<bool,int> MoveThroughBeatEvent;
+    /// <summary>
+    /// 產竊把计琌ㄣΤタ絋﹚╃翴ま
+    /// </summary>
+    event Action<bool, int> UserInputJudgmentEvent;
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-		metronome = GetComponent<Metronome>();
-		metronome.GetCurrentTime();
-		metronome.NextBeatEvent += OnNextBeat;
+        metronome = GetComponent<Metronome>();
+        metronome.GetCurrentTime();
+        metronome.NextBeatEvent += OnNextBeat;
 
-		PlaygroundMaker.LevelDescription level = playgroundMaker.GetLevel();
+        PlaygroundMaker.LevelDescription level = playgroundMaker.GetLevel();
 
-		currentTrack = new Track(
-			bpm: level.BPM,
-			judgmentList: level.GetJudgeDes().Select(aJudge => aJudge.RoundID).ToList(),
-			totalBeats: level.TotalRound,
-			musicStartOffset: (float)level.MusicStartOffset,
-			music);
+        currentTrack = new Track(
+            bpm: level.BPM,
+            judgmentList: level.GetJudgeDes().Select(aJudge => aJudge.RoundID).ToList(),
+            totalBeats: level.TotalRound,
+            musicStartOffset: (float)level.MusicStartOffset,
+            music);
 
-		StartCoroutine(CountToStart());
+        StartCoroutine(CountToStart());
+    }
+    private void OnDisable()
+    {
+        metronome.NextBeatEvent -= OnNextBeat;
     }
 
     private void OnNextBeat(int index)
@@ -80,9 +92,9 @@ public class GameManager : MonoBehaviour
             failTimes++;
             failedTimesText.text = failTimes.ToString();
             Debug.Log(failTimes);
-
         }
         ShowSuccessOrFail(success);
+        MoveThroughBeatEvent?.Invoke(success, previousBeatIndex);
     }
 
     // Update is called once per frame
@@ -120,11 +132,14 @@ public class GameManager : MonoBehaviour
                 hitStateText.text = "more than one click";
                 Debug.Log("more than one click");
             }
+            
         }
         else
         {
             //Debug.Log("not target to hit");
         }
+        UserInputJudgmentEvent?.Invoke(metronome.GetHitResult(), metronome.GetCurrentBeatIndex());
+
     }
     IEnumerator CountToStart()
     {
