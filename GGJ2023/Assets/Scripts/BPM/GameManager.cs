@@ -78,7 +78,11 @@ public class GameManager : MonoBehaviour
         //playgroundMaker.DrawRoute(index, modifySerial);
         //Debug.Log($"i:{index},next beat delta Time :{Time.time - ti},trackTime={metronome.GetCurrentTime()}");
         //ti = Time.time;
-        sceneManager.MoveCamera(index);
+        PlaygroundMaker.LevelDescription level = playgroundMaker.GetLevel();
+        if(index <= level.TotalRound - 3)
+        {
+            sceneManager.MoveCamera(index);
+        }
 
         int previousBeatIndex = index - 1;
         bool success =
