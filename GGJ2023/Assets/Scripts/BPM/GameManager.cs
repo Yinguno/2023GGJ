@@ -149,7 +149,8 @@ public class GameManager : MonoBehaviour
     {
         judgementResults.Clear();
         float beatLength = 60f / currentTrack.bpm;
-        //textMeshPro.gameObject.SetActive(true);
+        hitStateText.gameObject.SetActive(true);
+        hitStateText.gameObject.transform.parent.gameObject.SetActive(true);
         modifySerial++;
         playgroundMaker.DrawRoute(0, modifySerial);
         metronome.Stop();
@@ -161,7 +162,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(beatLength);
         hitStateText.text = "1";
         yield return new WaitForSeconds(beatLength);
-        //textMeshPro.gameObject.SetActive(false);
+        hitStateText.gameObject.SetActive(false);
+        hitStateText.gameObject.transform.parent.gameObject.SetActive(false);
         metronome.Go();
     }
     void ShowSuccessOrFail(bool? isSuccess)

@@ -2,7 +2,7 @@
     "Name": "level_1",
     "Description": "",
     "BPM": 123,
-    "TotalRound": 75,
+    "TotalRound": 76,
     "MusicStartOffset": 0.245,
     "Lines": [
         {
@@ -387,7 +387,7 @@
             "ForkFromLineID": 18,
             "StartRoundID": 49,
             "StartTurnType": 1,
-            "EndRoundID": 75,
+            "EndRoundID": 76,
             "Turns": [
                 {
                     "RoundID": 54,
@@ -400,6 +400,10 @@
                 {
                     "RoundID": 68,
                     "TurnType": 0
+                },
+                {
+                    "RoundID": 75,
+                    "TurnType": 1
                 }
             ]
         },
