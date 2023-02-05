@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 using TMPro;
 using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting;
@@ -14,8 +15,8 @@ public class GameManager : MonoBehaviour
     Metronome metronome;
 
     [SerializeField] float musicOffset;
-    [SerializeField] TextMeshProUGUI textMeshPro;
-    [SerializeField] TextMeshProUGUI countDownText;
+    [SerializeField] TextMeshProUGUI hitStateText;
+    [SerializeField] TextMeshProUGUI failedTimesText;
 
     public event Action<int> BeatJudgmentEvent;
 
@@ -28,6 +29,7 @@ public class GameManager : MonoBehaviour
 
     Track currentTrack;
     [SerializeField] PlaygroundMaker playgroundMaker;
+    [SerializeField] SceneManager sceneManager;
     [SerializeField] AudioClip beat;
     [SerializeField] AudioClip hit;
     [SerializeField] AudioClip music;
@@ -37,22 +39,30 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
-        metronome = GetComponent<Metronome>();
-        metronome.GetCurrentTime();
-        metronome.NextBeatEvent += OnNextBeat;
+		metronome = GetComponent<Metronome>();
+		metronome.GetCurrentTime();
+		metronome.NextBeatEvent += OnNextBeat;
 
-        currentTrack = new Track(bpm: 30, judgmentList: jList, totalBeats: 50, musicStartOffset: 0.245f, music);
+		PlaygroundMaker.LevelDescription level = playgroundMaker.GetLevel();
 
-        StartCoroutine(CountToStart());
+		currentTrack = new Track(
+			bpm: level.BPM,
+			judgmentList: level.GetJudgeDes().Select(aJudge => aJudge.RoundID).ToList(),
+			totalBeats: level.TotalRound,
+			musicStartOffset: (float)level.MusicStartOffset,
+			music);
+
+		StartCoroutine(CountToStart());
     }
 
     private void OnNextBeat(int index)
     {
         //audioSource.PlayOneShot(beat,0.1f);
-        modifySerial++;
-        playgroundMaker.DrawRoute(index, modifySerial);
+        //modifySerial++;
+        //playgroundMaker.DrawRoute(index, modifySerial);
         //Debug.Log($"i:{index},next beat delta Time :{Time.time - ti},trackTime={metronome.GetCurrentTime()}");
         //ti = Time.time;
+        sceneManager.MoveCamera(index);
 
         int previousBeatIndex = index - 1;
         bool success =
@@ -66,8 +76,9 @@ public class GameManager : MonoBehaviour
             ;
         if (!success)
         {
-            textMeshPro.text = "miss";
+            hitStateText.text = "miss";
             failTimes++;
+            failedTimesText.text = failTimes.ToString();
             Debug.Log(failTimes);
 
         }
@@ -85,8 +96,12 @@ public class GameManager : MonoBehaviour
         {
             CheckAHit();
         }
-        countDownText.text = metronome.GetCurrentBeatIndex().ToString();
         //metronome.GetHitResult_test();
+
+        // 
+        PlaygroundMaker.LevelDescription level = playgroundMaker.GetLevel();
+        float curProgress = metronome.GetCurrentTime() * (level.BPM / 60f);
+        sceneManager.MoveRegionChecker(curProgress);
     }
     private void CheckAHit()
     {
@@ -96,13 +111,13 @@ public class GameManager : MonoBehaviour
             if (!judgementResults.ContainsKey(metronome.GetCurrentBeatIndex()))
             {
                 judgementResults.Add(metronome.GetCurrentBeatIndex(), true);
-                textMeshPro.text = "success";
+                hitStateText.text = "success";
                 Debug.Log("success");
                 //audioSource.PlayOneShot(hit);
             }
             else
             {
-                textMeshPro.text = "more than one click";
+                hitStateText.text = "more than one click";
                 Debug.Log("more than one click");
             }
         }
@@ -121,11 +136,11 @@ public class GameManager : MonoBehaviour
         metronome.Stop();
 
         metronome.StartTrack(currentTrack);
-        textMeshPro.text = "3";
+        hitStateText.text = "3";
         yield return new WaitForSeconds(beatLength);
-        textMeshPro.text = "2";
+        hitStateText.text = "2";
         yield return new WaitForSeconds(beatLength);
-        textMeshPro.text = "1";
+        hitStateText.text = "1";
         yield return new WaitForSeconds(beatLength);
         //textMeshPro.gameObject.SetActive(false);
         metronome.Go();

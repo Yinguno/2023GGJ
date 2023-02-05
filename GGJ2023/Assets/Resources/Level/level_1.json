@@ -1,8 +1,9 @@
 {
     "Name": "level_1",
     "Description": "",
-    "BPM": 60,
+    "BPM": 123,
     "TotalRound": 75,
+    "MusicStartOffset": 0.245,
     "Lines": [
         {
             "ID": 0,

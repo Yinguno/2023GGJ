@@ -18,7 +18,7 @@ public class PlaygroundMaker : MonoBehaviour
 	public static LevelDescription gDummyLevel = null;
 
 	// Start is called before the first frame update
-	void Start()
+	void Awake()
 	{
 		string aDummyLevelJson = File.ReadAllText(Path.Combine(Application.dataPath, @"Resources\Level\level_1.json"));
 		gDummyLevel = JsonConvert.DeserializeObject<LevelDescription>(aDummyLevelJson);
@@ -49,6 +49,11 @@ public class PlaygroundMaker : MonoBehaviour
 			DrawRoute(gCurRound, gModifySerial);
 			gIsDrawCompleted = true;
 		}
+	}
+
+	public LevelDescription GetLevel()
+	{
+		return gDummyLevel;
 	}
 
 	public void DrawRoute(int iCurRound, int iModifySerial)
@@ -82,6 +87,7 @@ public class PlaygroundMaker : MonoBehaviour
 		public string Description { get; set; }
 		public int BPM { get; set; }
 		public int TotalRound { get; set; }
+		public double MusicStartOffset { get; set; }
 		public List<LineDescription> Lines { get; set; }
 
 		public List<JudgeDescription> GetJudgeDes()

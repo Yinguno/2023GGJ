@@ -34,47 +34,57 @@ public class SceneManager : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		LevelDescription aLevel = PlaygroundMaker.gDummyLevel;
-		if (aLevel != null && CurrentRegionChecker != null)
-		{
-			// move region checker
-			CurrentRegionChecker.transform.position = new Vector3(
-				CurrentRegionChecker.transform.position.x,
-				CurrentRegionChecker.transform.position.y, 
-				(float)((DateTime.Now - gBaseTime).TotalSeconds));
+		//LevelDescription aLevel = PlaygroundMaker.gDummyLevel;
+		//if (aLevel != null && CurrentRegionChecker != null)
+		//{
+		//	// move region checker
+		//	MoveRegionChecker((float)((DateTime.Now - gBaseTime).TotalSeconds));
 
-			// move camera
-			int iCurRound = Convert.ToInt32((DateTime.Now - gBaseTime).TotalSeconds);
-			if (gCurFinishedRound != iCurRound && iCurRound < aLevel.TotalRound)
+		//	// move camera
+		//	int iCurRound = Convert.ToInt32((DateTime.Now - gBaseTime).TotalSeconds);
+		//	if (gCurFinishedRound != iCurRound && iCurRound < aLevel.TotalRound)
+		//	{
+		//		MoveCamera(iCurRound);
+		//		gCurFinishedRound = iCurRound;
+		//	}
+		//}
+	}
+
+	public void MoveCamera(int iRound)
+	{
+		for (int aRound = iRound - 3; aRound <= iRound + 2; aRound++)
+		{
+			GameObject iRoundObj = LevelRoot.transform.Find($"Round[{aRound}]_{gSerial}")?.gameObject;
+			if (iRoundObj != null)
 			{
-				for (int aRound = iCurRound - 3; aRound <= iCurRound + 2; aRound++)
+				if (aRound == iRound - 3)
 				{
-					GameObject iRoundObj = LevelRoot.transform.Find($"Round[{aRound}]_{gSerial}")?.gameObject;
-					if (iRoundObj != null)
+					// remove old
+					for (int i = 0; i < iRoundObj.transform.childCount; i++)
 					{
-						if (aRound == iCurRound - 3)
-						{
-							// remove old
-							for (int i = 0; i < iRoundObj.transform.childCount; i++)
-							{
-								Transform aRoundObj = iRoundObj.transform.GetChild(i);
-								gTargetGroup.RemoveMember(aRoundObj);
-							}
-						}
-						else if (aRound == iCurRound + 2)
-						{
-							// add new
-							for (int i = 0; i < iRoundObj.transform.childCount; i++)
-							{
-								Transform aRoundObj = iRoundObj.transform.GetChild(i);
-								gTargetGroup.AddMember(aRoundObj, 1, 0);
-							}
-						}
+						Transform aRoundObj = iRoundObj.transform.GetChild(i);
+						gTargetGroup.RemoveMember(aRoundObj);
 					}
 				}
-
-				gCurFinishedRound = iCurRound;
+				else if (aRound == iRound + 2)
+				{
+					// add new
+					for (int i = 0; i < iRoundObj.transform.childCount; i++)
+					{
+						Transform aRoundObj = iRoundObj.transform.GetChild(i);
+						gTargetGroup.AddMember(aRoundObj, 1, 0);
+					}
+				}
 			}
 		}
 	}
+
+	public void MoveRegionChecker(float iProgress)
+	{
+		CurrentRegionChecker.transform.position = new Vector3(
+			CurrentRegionChecker.transform.position.x,
+			CurrentRegionChecker.transform.position.y,
+			iProgress);
+	}
+
 }
