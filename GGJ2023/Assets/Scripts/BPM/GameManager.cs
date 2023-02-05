@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 禫╃翴把计琌ㄣΤタ絋﹚╃翴ま
     /// </summary>
-    event Action<bool,int> MoveThroughBeatEvent;
+    event Action<bool, int> MoveThroughBeatEvent;
     /// <summary>
     /// 產竊把计琌ㄣΤタ絋﹚╃翴ま
     /// </summary>
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
 
         currentTrack = new Track(
             bpm: level.BPM,
-            judgmentList: level.GetJudgeDes().Select(aJudge => aJudge.RoundID).ToList(),
+            judgmentList: level.GetJudgeDes().Select(aJudge => aJudge.RoundID).Distinct().ToList(),
             totalBeats: level.TotalRound,
             musicStartOffset: (float)level.MusicStartOffset,
             music);

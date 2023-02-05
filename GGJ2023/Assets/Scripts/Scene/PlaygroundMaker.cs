@@ -95,8 +95,19 @@ public class PlaygroundMaker : MonoBehaviour
 			List<JudgeDescription> aRtnJudges = new List<JudgeDescription>();
 			for(int aRound = 0; aRound < TotalRound; aRound++)
 			{
-				bool iHasJudge = Lines.Where(aLine => aLine.HasJudge(aRound)).Any();
-				if (iHasJudge) { aRtnJudges.Add(new JudgeDescription() { RoundID = aRound }); }
+				List<LineDescription> aJudgeLines = Lines.Where(aLine => aLine.HasJudge(aRound)).ToList();
+				if (aJudgeLines.Count > 0)
+				{
+					foreach (LineDescription aJudgeLine in aJudgeLines)
+					{
+						aRtnJudges.Add(new JudgeDescription()
+						{
+							RoundID = aRound,
+							LineID = aJudgeLine.ID,
+							Position = aJudgeLine.GetBlockPosition(aRound)
+						});
+					}
+				}
 			}
 
 			return aRtnJudges;
@@ -106,6 +117,8 @@ public class PlaygroundMaker : MonoBehaviour
 	public class JudgeDescription
 	{
 		public int RoundID { get; set; }
+		public int LineID { get; set; }
+		public Vector3 Position { get; set; }
 	}
 
 
