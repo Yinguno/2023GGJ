@@ -51,6 +51,9 @@ public class GameManager : MonoBehaviour
         metronome.GetCurrentTime();
         metronome.NextBeatEvent += OnNextBeat;
 
+		MoveThroughBeatEvent += sceneManager.MoveThroughBeatEvent;
+        UserInputJudgmentEvent += sceneManager.UserInputJudgmentEvent;
+
         PlaygroundMaker.LevelDescription level = playgroundMaker.GetLevel();
 
         currentTrack = new Track(
@@ -62,7 +65,8 @@ public class GameManager : MonoBehaviour
 
         StartCoroutine(CountToStart());
     }
-    private void OnDisable()
+
+	private void OnDisable()
     {
         metronome.NextBeatEvent -= OnNextBeat;
     }

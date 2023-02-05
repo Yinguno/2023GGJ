@@ -12,6 +12,10 @@ public class SceneManager : MonoBehaviour
 	public GameObject LevelRoot;
 	public GameObject CinemachineTargetGroup;
 
+	public GameObject StateRoot;
+	public GameObject SuccessObject;
+	public GameObject FailObject;
+
 	private CinemachineTargetGroup gTargetGroup;
 
 	DateTime gBaseTime;
@@ -28,6 +32,8 @@ public class SceneManager : MonoBehaviour
 			Match aMatch = Regex.Match(aFirstRoundObjName, @"\(([a-z|0-9]+?)\)");
 			if (aMatch.Success) { gSerial = aMatch.Value; }
 		}
+
+		gStateObjectsMap = new Dictionary<int, List<GameObject>>();
 	}
 
 	private int gCurFinishedRound = -1;
@@ -85,6 +91,52 @@ public class SceneManager : MonoBehaviour
 			CurrentRegionChecker.transform.position.x,
 			CurrentRegionChecker.transform.position.y,
 			iProgress);
+	}
+
+	private Dictionary<int, List<GameObject>> gStateObjectsMap;
+
+	public void MoveThroughBeatEvent(bool iSuccess, int iRound)
+	{
+		if(!iSuccess)
+		{
+			GameObject iRoundObj = LevelRoot.transform.Find($"Round[{iRound}]_{gSerial}")?.gameObject;
+			if (iRoundObj != null)
+			{
+				for (int i = 0; i < iRoundObj.transform.childCount; i++)
+				{
+					Transform aRoundObj = iRoundObj.transform.GetChild(i);
+					if (aRoundObj.gameObject.name.Contains("Block"))
+					{
+						Vector3 aCreatedPos = aRoundObj.position;
+						aCreatedPos.y += 2;
+						GameObject aCreatedState = Instantiate(FailObject, aCreatedPos, new Quaternion());
+						aCreatedState.transform.parent = StateRoot.transform;
+					}
+				}
+			}
+		}
+	}
+
+	public void UserInputJudgmentEvent(bool iSuccess, int iRound)
+	{
+		if (iSuccess)
+		{
+			GameObject iRoundObj = LevelRoot.transform.Find($"Round[{iRound}]_{gSerial}")?.gameObject;
+			if (iRoundObj != null)
+			{
+				for (int i = 0; i < iRoundObj.transform.childCount; i++)
+				{
+					Transform aRoundObj = iRoundObj.transform.GetChild(i);
+					if (aRoundObj.gameObject.name.Contains("Block"))
+					{
+						Vector3 aCreatedPos = aRoundObj.position;
+						aCreatedPos.y += 2;
+						GameObject aCreatedState = Instantiate(SuccessObject, aCreatedPos, new Quaternion());
+						aCreatedState.transform.parent = StateRoot.transform;
+					}
+				}
+			}
+		}
 	}
 
 }
