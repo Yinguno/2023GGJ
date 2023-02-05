@@ -187,7 +187,7 @@ public class PlaygroundMaker : MonoBehaviour
 					}
 					GameObject aCreatedLink = GameObject.Instantiate(iBaseLink, (aCurBlockPosition + aLastBlockPostion) / 2, new Quaternion());
 					aCreatedLink.transform.eulerAngles = new Vector3(0, aRotationAngle, 0);
-					aCreatedLink.transform.localScale = new Vector3(1, 1, (aLastBlockPostion - aCurBlockPosition).magnitude);
+					aCreatedLink.transform.localScale = new Vector3(1, 1, (aLastBlockPostion - aCurBlockPosition).magnitude * (aLastTurnType == TurnType.NONE ? 1.055f : 1.045f));
 					aCreatedLink.transform.Find("Link").gameObject.name = $"{iRound}_{ID}_Link";
 					aCreatedLink.transform.parent = aRoundRoot.transform;
 				}
