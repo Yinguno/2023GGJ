@@ -38,7 +38,19 @@ public class JudgmentZone
         //var center = startTime + interval * centerPercent;
         var min = startTime + interval * (centerPercent - earlierRangePercent);
         var max = startTime + interval * (centerPercent + laterRangePercent);
+        Debug.Log($"(min,max)=({min},{max}),percentage = {(time- startTime)/ interval}");
         return time > min && time < max;
+    }
+    public (float percent,bool result) GetJudgmentResult_test(float time)
+    {
+        //var center = startTime + interval * centerPercent;
+        var min = startTime + interval * (centerPercent - earlierRangePercent);
+        var max = startTime + interval * (centerPercent + laterRangePercent);
+        
+
+        bool result = time > min && time < max;
+        float percent = (time - startTime)/ interval;
+        return new (percent, result);
     }
     public bool IsTimeInJudgmentZone(float time)
     {
